@@ -56,8 +56,7 @@ runs:
       run: |
         export SOURCE_GET_URL=$(echo ${{ toJSON(steps.source_endpoint.outputs.SOURCE_ENDPOINT) }} | jq -r '.get')
         curl -X POST https://api.heroku.com/review-apps \
-        -d '{
-        "source_blob": {"url": "'"$SOURCE_GET_URL"'", "version": "'"${{ github.event.pull_request.head.sha }}"'"},
+        -d '{"source_blob": {"url": "'"$SOURCE_GET_URL"'", "version": "'"${{ github.event.pull_request.head.sha }}"'"},
         "branch": "${{ github.head_ref }}",
         "pipeline": "${{ inputs.pipeline-id }}",
         "pr_number": ${{ github.event.number }}
@@ -71,7 +70,7 @@ runs:
       run: |
         export SOURCE_GET_URL=$(echo ${{ toJSON(steps.source_endpoint.outputs.SOURCE_ENDPOINT) }} | jq -r '.get')
         export OUTPUT_STREAM_URL=$(curl -X POST https://api.heroku.com/apps/$APP_NAME/builds \
-        -d '{"source_blob":{"url":"'"$SOURCE_GET_URL"'", "version": "${{ github.event.pull_request.head.sha }}"}}' \
+        -d '{"source_blob":{"url":"'"$SOURCE_GET_URL"'", "version": "'"${{ github.event.pull_request.head.sha }}"'"}}' \
         -H 'Accept: application/vnd.heroku+json; version=3' \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer ${{ inputs.api-key }}" | \
